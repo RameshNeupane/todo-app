@@ -40,7 +40,7 @@
   color: gray;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1200px) {
   .todo {
     flex-direction: column;
     gap: 0.5rem;

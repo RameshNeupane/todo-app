@@ -43,7 +43,7 @@
   background-color: rgba(0, 0, 100, 0.3);
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1200px) {
   .add-todo {
     width: 95%;
   }
