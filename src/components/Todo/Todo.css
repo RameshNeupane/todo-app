@@ -39,3 +39,21 @@
   text-decoration: line-through;
   color: gray;
 }
+
+@media only screen and (max-width: 1024px) {
+  .todo {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .todo-name {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .todo-btns {
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+  }
+}

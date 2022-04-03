@@ -42,3 +42,15 @@
   border: 0.2rem solid rgba(0, 0, 100, 0.6);
   background-color: rgba(0, 0, 100, 0.3);
 }
+
+@media only screen and (max-width: 1024px) {
+  .add-todo {
+    width: 95%;
+  }
+
+  .todo-form input,
+  .todo-form button {
+    font-size: 1.2rem;
+    height: 2.5rem;
+  }
+}
