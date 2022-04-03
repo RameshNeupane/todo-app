@@ -34,3 +34,8 @@
   border-color: rgba(0, 0, 100, 0.6);
   background-color: rgba(0, 0, 100, 0.3);
 }
+
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}

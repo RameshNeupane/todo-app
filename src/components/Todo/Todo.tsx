@@ -1,29 +1,42 @@
-import './Todo.css';
+import { Todo } from "../../types/todos";
+import "./Todo.css";
 
 type TodoProps = {
-  todo: string;
-}
+  todo: Todo;
+  updateTodoStatus: (id: string) => void;
+  updateTodosOnDelete: (id: string) => void;
+};
 
-const Todo = ({todo}: TodoProps) => {
+const TodoItem = ({
+  todo,
+  updateTodoStatus,
+  updateTodosOnDelete,
+}: TodoProps) => {
   const handleComplete = () => {
-
-  }
+    updateTodoStatus(todo.id);
+  };
 
   const handleDelete = () => {
-    const todoEl = document.querySelectorAll('.todo');
-    console.log(todoEl);
-    // todoEl?.remove();
+    updateTodosOnDelete(todo.id);
+  };
+
+  let classes = "todo-name";
+
+  if (todo.isCompleted) {
+    classes += " completed";
   }
 
   return (
     <div className="todo">
-      <h3 className="todo-name">{todo}</h3>
-      <div className='todo-btns'>
-        <button onClick={handleComplete}>Complete</button>
+      <h3 className={classes}>{todo.todo}</h3>
+      <div className="todo-btns">
+        <button onClick={handleComplete}>
+          {todo.isCompleted ? "Mark as incomplete" : "Mark as completed"}
+        </button>
         <button onClick={handleDelete}>Delete</button>
       </div>
     </div>
   );
-}
+};
 
-export default Todo;
+export default TodoItem;
