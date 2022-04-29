@@ -3,8 +3,8 @@ import "./Todo.css";
 
 type TodoProps = {
   todo: Todo;
-  updateTodoStatus: (id: string) => void;
-  updateTodosOnDelete: (id: string) => void;
+  updateTodoStatus: (id: number) => void;
+  updateTodosOnDelete: (id: number) => void;
 };
 
 const TodoItem = ({
@@ -22,7 +22,7 @@ const TodoItem = ({
 
   let classes = "todo-name";
 
-  if (todo.isCompleted) {
+  if (todo.is_completed) {
     classes += " completed";
   }
 
@@ -31,7 +31,7 @@ const TodoItem = ({
       <h3 className={classes}>{todo.todo}</h3>
       <div className="todo-btns">
         <button onClick={handleComplete}>
-          {todo.isCompleted ? "Mark as incomplete" : "Mark as completed"}
+          {todo.is_completed ? "Mark as incomplete" : "Mark as completed"}
         </button>
         <button onClick={handleDelete}>Delete</button>
       </div>

@@ -1,22 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import AddTodo from "./components/AddTodo/AddTodo";
 import TodoContainer from "./components/TodoContainer/TodoContainer";
 import { Todo, Todos } from "./types/todos";
+import axios from "axios";
 
 const App = () => {
   const [todoList, setTodoList] = useState<Todos>([] as Todos);
+
+  const fetchAllTodo = async (url: string) => {
+    const response = await axios.get<Promise<Todos>>(url);
+    const todos = await response.data;
+    setTodoList([...todos]);
+  };
+
+  useEffect(() => {
+    fetchAllTodo("http://localhost:8000/todo");
+  }, []);
 
   const addTodo = (todo: Todo): void => {
     setTodoList([...todoList, todo]);
   };
 
-  const updateTodoStatus = (id: string): void => {
+  const updateTodoStatus = (id: number): void => {
     const updatedTodos = todoList.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
-          isCompleted: !todo.isCompleted,
+          isCompleted: !todo.is_completed,
         };
       }
 
@@ -26,7 +37,7 @@ const App = () => {
     setTodoList(updatedTodos);
   };
 
-  const updatedTodosOnDelete = (id: string): void => {
+  const updatedTodosOnDelete = (id: number): void => {
     const updatedTodos = todoList.filter((todo) => {
       return todo.id !== id;
     });
@@ -50,7 +61,7 @@ const App = () => {
         </span>
         {"]"}
       </h1>
-      <AddTodo addTodo={addTodo} />
+      {/* <AddTodo addTodo={addTodo} /> */}
       <hr />
       <TodoContainer
         todoList={todoList}

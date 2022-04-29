@@ -11,14 +11,13 @@ const AddTodo = ({ addTodo }: AddTodoProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (todo.length > 0) {
-      addTodo({
-        todo,
-        id: `${Date.now()}`,
-        isCompleted: false,
-      });
-      setTodo("");
-    }
+    // if (todo.length > 0) {
+    //   addTodo({
+    //     todo,
+    //     isCompleted: false,
+    //   });
+    //   setTodo("");
+    // }
   };
 
   return (

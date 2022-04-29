@@ -4,8 +4,8 @@ import "./TodoContainer.css";
 
 type TodoContainerProps = {
   todoList: Todos;
-  updateTodoStatus: (id: string) => void;
-  updateTodosOnDelete: (id: string) => void;
+  updateTodoStatus: (id: number) => void;
+  updateTodosOnDelete: (id: number) => void;
 };
 
 const TodoContainer = ({
