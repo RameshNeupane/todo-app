@@ -13,7 +13,7 @@ def create(request: schemas.Todo, db: Session = Depends(database.get_db)):
     db.add(new_todo)
     db.commit()
     db.refresh(new_todo)
-    return new_todo
+    return {'status': 'added successfully'}
 
 
 @router.get('/todo', response_model=List[schemas.ShowTodo], tags=['todo'])
@@ -33,13 +33,13 @@ def show(id: int, db: Session = Depends(database.get_db)):
 
 @router.delete('/todo/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=['todo'])
 def delete(id: int, db: Session = Depends(database.get_db)):
-    todo = db.query(models.Todo).filter(models.Todo.id == id)
-    if not todo.first():
+    todo = db.query(models.Todo).filter(models.Todo.id == id).first()
+    if not todo:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'task with id {id} not available')
-    db.delete(synchronize_session=False)
+    db.delete(todo)
     db.commit()
-    return 'deleted successfully'
+    return {'status': 'deleted successfully'}
 
 
 @router.put('/todo/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['todo'])
@@ -52,4 +52,4 @@ def update(id: int, db: Session = Depends(database.get_db)):
     todo.update({models.Todo.is_completed: not is_completed_status},
                 synchronize_session=False)
     db.commit()
-    return 'updated successfully'
+    return {'status': 'updated successfully'}

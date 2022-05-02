@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import AddTodo from "./components/AddTodo/AddTodo";
 import TodoContainer from "./components/TodoContainer/TodoContainer";
-import { Todo, Todos } from "./types/todos";
+import { Todo, Todos, TodoResponse } from "./types/todos";
 import axios from "axios";
 
 const App = () => {
@@ -18,31 +18,19 @@ const App = () => {
     fetchAllTodo("http://localhost:8000/todo");
   }, []);
 
-  const addTodo = (todo: Todo): void => {
-    setTodoList([...todoList, todo]);
+  const addTodo = async (url: string, todo: Todo): Promise<TodoResponse> => {
+    const response = await axios.post<Promise<TodoResponse>>(url, todo);
+    return response.data;
   };
 
-  const updateTodoStatus = (id: number): void => {
-    const updatedTodos = todoList.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          isCompleted: !todo.is_completed,
-        };
-      }
-
-      return todo;
-    });
-
-    setTodoList(updatedTodos);
+  const updateTodoStatus = async (url: string): Promise<TodoResponse> => {
+    const response = await axios.put<Promise<TodoResponse>>(url);
+    return response.data;
   };
 
-  const updatedTodosOnDelete = (id: number): void => {
-    const updatedTodos = todoList.filter((todo) => {
-      return todo.id !== id;
-    });
-
-    setTodoList(updatedTodos);
+  const updatedTodosOnDelete = async (url: string): Promise<TodoResponse> => {
+    const response = await axios.delete<Promise<TodoResponse>>(url);
+    return response.data;
   };
 
   return (
@@ -61,7 +49,7 @@ const App = () => {
         </span>
         {"]"}
       </h1>
-      {/* <AddTodo addTodo={addTodo} /> */}
+      <AddTodo addTodo={addTodo} />
       <hr />
       <TodoContainer
         todoList={todoList}

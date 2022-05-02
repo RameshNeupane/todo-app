@@ -3,8 +3,8 @@ import "./Todo.css";
 
 type TodoProps = {
   todo: Todo;
-  updateTodoStatus: (id: number) => void;
-  updateTodosOnDelete: (id: number) => void;
+  updateTodoStatus: (url: string) => void;
+  updateTodosOnDelete: (url: string) => void;
 };
 
 const TodoItem = ({
@@ -13,11 +13,11 @@ const TodoItem = ({
   updateTodosOnDelete,
 }: TodoProps) => {
   const handleComplete = () => {
-    updateTodoStatus(todo.id);
+    updateTodoStatus(`http://localhost:8000/todo/${todo.id as number}`);
   };
 
   const handleDelete = () => {
-    updateTodosOnDelete(todo.id);
+    updateTodosOnDelete(`http://localhost:8000/todo/${todo.id as number}`);
   };
 
   let classes = "todo-name";
