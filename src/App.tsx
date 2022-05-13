@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import AddTodo from "./components/AddTodo/AddTodo";
 import TodoContainer from "./components/TodoContainer/TodoContainer";
-import { Todo, Todos, TodoResponse } from "./types/todos";
+import { Todo, Todos } from "./types/todos";
 import axios from "axios";
+import config from "./config";
 
 const App = () => {
-  const [todoList, setTodoList] = useState<Todos>([] as Todos);
+  const [todoList, setTodoList] = useState<Todos | any>(null);
 
   const fetchAllTodo = async (url: string) => {
     const response = await axios.get<Promise<Todos>>(url);
@@ -15,22 +16,32 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchAllTodo("http://localhost:8000/todo");
+    fetchAllTodo(`${config.baseUrl}/todo`);
   }, []);
 
-  const addTodo = async (url: string, todo: Todo): Promise<TodoResponse> => {
-    const response = await axios.post<Promise<TodoResponse>>(url, todo);
-    return response.data;
+  const addTodo = async (url: string, todo: Todo) => {
+    const response = await axios.post<Promise<Todo>>(url, todo);
+    setTodoList([...todoList, response.data])
   };
 
-  const updateTodoStatus = async (url: string): Promise<TodoResponse> => {
-    const response = await axios.put<Promise<TodoResponse>>(url);
-    return response.data;
+  const updateTodoStatus = async (id: number): Promise<void> => {
+    const url = `${ config.baseUrl }/todo/${ id}`
+    const response = await axios.put<Promise<Todo>>(url);
+    const updatedTodo = await response.data
+
+    setTodoList(todoList.map((todo: Todo) => 
+      todo.id === updatedTodo.id 
+      ? {...todo, is_completed: updatedTodo.is_completed} 
+      : todo
+    ))
   };
 
-  const updatedTodosOnDelete = async (url: string): Promise<TodoResponse> => {
-    const response = await axios.delete<Promise<TodoResponse>>(url);
-    return response.data;
+  const updatedTodosOnDelete = async (id: number): Promise<void> => {
+    const url = `${ config.baseUrl }/todo/${ id}`
+
+    await axios.delete<Promise<Todo>>(url);
+
+    setTodoList(todoList.filter((todo: Todo) => todo.id !== id))
   };
 
   return (

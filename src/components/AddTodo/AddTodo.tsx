@@ -1,23 +1,22 @@
 import React, { useState } from "react";
-import { Todo, TodoResponse } from "../../types/todos";
+import config from "../../config";
+import { Todo,  } from "../../types/todos";
 import "./AddTodo.css";
 
 type AddTodoProps = {
-  addTodo: (url: string, todo: Todo) => Promise<TodoResponse>;
+  addTodo: (url: string, todo: Todo) => Promise<void>;
 };
 
 const AddTodo = ({ addTodo }: AddTodoProps) => {
   const [todo, setTodo] = useState("");
-  const [todoPostStatus, setTodoPostStatus] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (todo.length > 0) {
-      const msg = await addTodo("http://localhost:8000/todo", {
+      addTodo(`${config.baseUrl}/todo`, {
         todo,
         is_completed: false,
       });
-      setTodoPostStatus(msg.status);
       setTodo("");
     }
   };

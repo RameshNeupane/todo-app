@@ -4,8 +4,8 @@ import "./TodoContainer.css";
 
 type TodoContainerProps = {
   todoList: Todos;
-  updateTodoStatus: (url: string) => void;
-  updateTodosOnDelete: (url: string) => void;
+  updateTodoStatus: (id: number) => void;
+  updateTodosOnDelete: (id: number) => void;
 };
 
 const TodoContainer = ({
@@ -15,7 +15,7 @@ const TodoContainer = ({
 }: TodoContainerProps) => {
   return (
     <div className="todo-container">
-      {todoList.length > 0 &&
+      {todoList?.length > 0 &&
         todoList.map((todo) => (
           <TodoItem
             key={todo.id}

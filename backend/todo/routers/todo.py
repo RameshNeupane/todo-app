@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, Response, status, HTTPException
 from .. import schemas, database, models
 from typing import List
 from sqlalchemy.orm import Session
@@ -6,14 +6,14 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.post('/todo', status_code=status.HTTP_201_CREATED, tags=['todo'])
+@router.post('/todo', status_code=status.HTTP_201_CREATED, response_model=schemas.ShowTodo, tags=['todo'])
 def create(request: schemas.Todo, db: Session = Depends(database.get_db)):
     new_todo = models.Todo(
         todo=request.todo, is_completed=request.is_completed)
     db.add(new_todo)
     db.commit()
     db.refresh(new_todo)
-    return {'status': 'added successfully'}
+    return new_todo
 
 
 @router.get('/todo', response_model=List[schemas.ShowTodo], tags=['todo'])
@@ -39,10 +39,9 @@ def delete(id: int, db: Session = Depends(database.get_db)):
                             detail=f'task with id {id} not available')
     db.delete(todo)
     db.commit()
-    return {'status': 'deleted successfully'}
 
 
-@router.put('/todo/{id}', status_code=status.HTTP_202_ACCEPTED, tags=['todo'])
+@router.put('/todo/{id}', status_code=status.HTTP_202_ACCEPTED, response_model=schemas.ShowTodo, tags=['todo'])
 def update(id: int, db: Session = Depends(database.get_db)):
     todo = db.query(models.Todo).filter(models.Todo.id == id)
     if not todo.first():
@@ -52,4 +51,6 @@ def update(id: int, db: Session = Depends(database.get_db)):
     todo.update({models.Todo.is_completed: not is_completed_status},
                 synchronize_session=False)
     db.commit()
-    return {'status': 'updated successfully'}
+
+    updated_todo = db.query(models.Todo).filter(models.Todo.id == id).first()
+    return updated_todo
