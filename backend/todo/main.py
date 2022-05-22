@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from . import database, models
-from .routers import todo, user
+from .routers import todo, user, info
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,3 +28,4 @@ app.add_middleware(
 
 app.include_router(todo.router)
 app.include_router(user.router)
+app.include_router(info.router)
